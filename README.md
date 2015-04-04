@@ -17,15 +17,15 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-userscript-meta');
 ```
 
-## The "userscript_meta" task
+## The "userscript-meta" task
 
 ### Overview
-In your project's Gruntfile, add a section named `userscript_meta` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `userscript-meta` to the data object passed into `grunt.initConfig()`.
 This plugins reads the information from the `package.json` where more can be added in a `userscript` object. The pkg object and a destination is required.
 ```js
 grunt.initConfig({
   pkg: grunt.file.readJSON('package.json'), //global pkg
-  userscript_meta: {
+  'userscript-meta': {
     your_target: {
       options:{
         pkg:  grunt.file.readJSON('other_package.json') //overwrites the global pkg

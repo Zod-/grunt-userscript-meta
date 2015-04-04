@@ -9,7 +9,7 @@
 'use strict';
 
 module.exports = function (grunt) {
-  grunt.registerMultiTask('userscript_meta',
+  grunt.registerMultiTask('userscript-meta',
     'Generate the userscript metadata-block with package.json',
     function () {
       var opts = this.options({

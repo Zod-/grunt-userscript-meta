@@ -41,7 +41,7 @@ module.exports = function (grunt) {
       tests: ['tmp']
     },
 
-    userscript_meta: userscript_meta,
+    'userscript-meta': userscript_meta,
 
     // Unit tests.
     nodeunit: {
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  grunt.registerTask('test', ['clean', 'userscript_meta', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'userscript-meta', 'nodeunit']);
 
   grunt.registerTask('default', ['jshint', 'test']);
 
