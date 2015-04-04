@@ -1,7 +1,7 @@
 {
   "name": "grunt-userscript-meta",
   "description": "Generate the userscript metadata-block with package.json",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Zod-/grunt-userscript-meta",
   "author": {
     "name": "Julian Hangstörfer",
