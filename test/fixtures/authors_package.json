@@ -12,6 +12,7 @@
   }],
   "license": "MIT",
   "userscript": {
+    "namespace": "https://github.com/Zod-",
     "author": {
       "name": "Zod-"
     }

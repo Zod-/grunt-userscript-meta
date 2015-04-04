@@ -58,13 +58,17 @@ The global pkg object can be overwritten for each task.
     "name": "Julian Hangstörfer",
     "email": "jhangstoerfer@gmail.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "userscript":{
+    "namespace": "https://github.com/Zod-"
+  }
 }
 
 //Produces
 
 // ==UserScript==
 // @name         Test Userscript
+// @namespace    https://github.com/Zod-
 // @description  Testing the grunt-userscript-meta module
 // @version      0.1.0
 // @author       Julian Hangstörfer

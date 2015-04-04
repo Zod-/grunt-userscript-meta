@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "userscript": {
+    "namespace": "https://github.com/Zod-",
     "resource": [{
       "name": "resName1",
       "url": "resUrl1"

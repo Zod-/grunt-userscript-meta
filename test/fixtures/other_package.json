@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "userscript": {
+    "namespace": "https://github.com/Zod-",
     "other": {
       "include": ["url1", "url2"],
       "grant": ["GM_setValue", "GM_getValue"],

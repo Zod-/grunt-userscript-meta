@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name         Test Userscript
+// @namespace    https://github.com/Zod-
 // @description  Testing the grunt-userscript-meta module
 // @version      0.1.0
 // @author       Julian Hangstörfer

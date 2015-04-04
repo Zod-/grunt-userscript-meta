@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "userscript": {
+    "namespace": "https://github.com/Zod-",
     "name": {
       "fr": "French Test Userscript",
       "de": "German Test Userscript"

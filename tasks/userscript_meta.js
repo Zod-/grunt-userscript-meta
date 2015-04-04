@@ -66,7 +66,7 @@ module.exports = function (grunt) {
           });
         } else if (typeof person === 'string') {
           var name = person.match(/([^<]*)<[^>]*>[^\(]*\([^\)]*\)/)[1];
-          push(meta, name);
+          push(meta, name.trim());
         } else if (typeof person === 'object') {
           push(meta, person.name);
         }

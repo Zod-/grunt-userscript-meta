@@ -14,5 +14,8 @@
   }, {
     "type": "Apache",
     "url": "https://github.com/Zod-/grunt-userscript-meta/blob/master/LICENSE-Apache"
-  }]
+  }],
+  "userscript":{
+    "namespace": "https://github.com/Zod-"
+  }
 }
