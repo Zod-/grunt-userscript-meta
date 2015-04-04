@@ -23,26 +23,20 @@ var grunt = require('grunt');
 */
 
 exports.userscript_meta = {
-  setUp: function(done) {
-    // setup here if necessary
+  setUp: function (done) {
     done();
   },
-  default_options: function(test) {
-    test.expect(1);
+  test_files: function (test) {
+    var tests = grunt.file.expand('test/fixtures/*_package.json');
+    test.expect(tests.length);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
-
+    tests.forEach(function (pkg) {
+      var testName = pkg.replace(/^test\/fixtures\/|_package\.json$/g, '');
+      var actual = grunt.file.read('tmp/' + testName + '_meta.js');
+      var expected = grunt.file.read('test/expected/' + testName +
+        '_meta.js');
+      test.equal(actual, expected, testName);
+    });
     test.done();
-  },
-  custom_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-
-    test.done();
-  },
+  }
 };

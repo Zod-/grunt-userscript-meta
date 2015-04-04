@@ -21,15 +21,16 @@ grunt.loadNpmTasks('grunt-userscript-meta');
 
 ### Overview
 In your project's Gruntfile, add a section named `userscript_meta` to the data object passed into `grunt.initConfig()`.
-
+This plugins reads the information from the `package.json` where more can be added in a `userscript` object. The pkg object and a destination is required.
 ```js
 grunt.initConfig({
+  pkg: grunt.file.readJSON('package.json'), //global pkg
   userscript_meta: {
-    options: {
-      // Task-specific options go here.
-    },
     your_target: {
-      // Target-specific file lists and/or options go here.
+      options:{
+        pkg:  grunt.file.readJSON('other_package.json') //overwrites the global pkg
+      }
+      dest: 'src/userscript.meta.js'
     },
   },
 });
@@ -37,53 +38,154 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### options.pkg
+Type: `Object`
+Default value: The global pkg object.
 
-A string value that is used to do something with whatever.
+The global pkg object can be overwritten for each task.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+### Package.json examples
 
-A string value that is used to do something else with whatever else.
+#### Basic example
 
-### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  userscript_meta: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+```javascript
+{
+  "name": "Test Userscript",
+  "description": "Testing the grunt-userscript-meta module",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Zod-/grunt-userscript-meta",
+  "author": {
+    "name": "Julian Hangstörfer",
+    "email": "jhangstoerfer@gmail.com"
   },
-});
+  "license": "MIT"
+}
+
+//Produces
+
+// ==UserScript==
+// @name         Test Userscript
+// @description  Testing the grunt-userscript-meta module
+// @version      0.1.0
+// @author       Julian Hangstörfer
+// @source       https://github.com/Zod-/grunt-userscript-meta
+// @license      MIT
+// ==/UserScript==
+
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+#### pkg.userscript.name
+The name for the userscript will be taken from `pkg.name` but localization can be added via
+`pkg.userscript.name`.
 
-```js
-grunt.initConfig({
-  userscript_meta: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+```javascript
+{
+  "name": 'userscript name',
+  //...
+  "userscript": {
+    "name": {
+      "fr": "french userscript name",
+      "de": "german userscript name"
+    }
+  }
+}
+
+//Produces
+
+// ==UserScript==
+// ...
+// @name     userscript name
+// @name:fr  french userscript name
+// @name:de  german userscript name
+// ...
+// ==/UserScript==
+```
+
+#### pkg.userscript.description
+The same can be done for the description.
+
+```javascript
+{
+  "description": 'description',
+  //...
+  "userscript": {
+    "description": {
+      "fr": "french description",
+      "de": "german description"
+    }
+  }
+}
+
+//Produces
+
+// ==UserScript==
+// ...
+// @description     description
+// @description:fr  french description
+// @description:de  german description
+// ...
+// ==/UserScript==
+```
+
+#### pkg.userscript.resource
+Resources can be added via `pkg.userscript.resource`
+
+```javascript
+{
+  //...
+  "userscript": {
+    "resource": [{
+      "name": "resName1",
+      "url": "resUrl1"
+    }, {
+      "name": "resName2",
+      "url": "resUrl2"
+    }]
+  }
+}
+
+//Produces
+
+// ==UserScript==
+// ...
+// @resource     resName1 resUrl1
+// @resource     resName2 resUrl2
+// ...
+// ==/UserScript==
+```
+
+#### pkg.userscript.other
+Every other metakey can be added via the `other` object which can be either a
+single value or an array.
+
+```javascript
+"userscript": {
+  "other": {
+    "include": ["url1", "url2"],
+    "grant": ["GM_setValue", "GM_getValue"],
+    "run-at": "document-start",
+    "require": ["url3", "url4"]
+  }
+}
+
+//Produces
+
+// ==UserScript==
+// ...
+// @include      url1
+// @include      url2
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @run-at       document-start
+// @require      url3
+// @require      url4
+// ...
+// ==/UserScript==
 ```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+### 0.1.0
+Added functionality

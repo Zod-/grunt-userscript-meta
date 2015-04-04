@@ -1,0 +1,20 @@
+{
+  "name": "Test Userscript",
+  "description": "Testing the grunt-userscript-meta module",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Zod-/grunt-userscript-meta",
+  "author": {
+    "name": "Julian Hangstörfer",
+    "email": "jhangstoerfer@gmail.com"
+  },
+  "license": "MIT",
+  "userscript": {
+    "resource": [{
+      "name": "resName1",
+      "url": "resUrl1"
+    }, {
+      "name": "resName2",
+      "url": "resUrl2"
+    }]
+  }
+}

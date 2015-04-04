@@ -14,12 +14,10 @@
   "bugs": {
     "url": "https://github.com/Zod-/grunt-userscript-meta/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/Zod-/grunt-userscript-meta/blob/master/LICENSE-MIT"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/Zod-/grunt-userscript-meta/blob/master/LICENSE-MIT"
+  }],
   "engines": {
     "node": ">= 0.8.0"
   },

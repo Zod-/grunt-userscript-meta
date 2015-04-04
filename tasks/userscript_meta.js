@@ -8,43 +8,125 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+  grunt.registerMultiTask('userscript_meta',
+    'Generate the userscript metadata-block with package.json',
+    function () {
+      var opts = this.options({
+        pkg: grunt.config.get('pkg')
+      });
+      if (!opts.pkg) {
+        grunt.config.requires('pkg');
+      }
+      var pkg = opts.pkg;
+      var metaData = [];
+      var src = '';
+      var maxKeyLength = 0;
+      pkg.userscript = pkg.userscript || {};
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
-
-  grunt.registerMultiTask('userscript_meta', 'Generate the userscript metadata-block with package.json', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
-
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+      function push(k, v) {
+        if (!v) {
+          return;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+        if (Array.isArray(v)) {
+          v.forEach(function (vv) {
+            push(k, vv);
+          });
+        } else {
+          var obj = {};
+          maxKeyLength = Math.max(maxKeyLength, k.length);
+          obj[k] = v;
+          metaData.push(obj);
+          grunt.verbose.writeln('Adding ' + k + ': ' + v);
+        }
+      }
 
-      // Handle options.
-      src += options.punctuation;
+      function localization(meta, v) {
+        for (var name in v) {
+          if (v.hasOwnProperty(name)) {
+            push(meta + ':' + name, v[name]);
+          }
+        }
+      }
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+      push('name', pkg.name);
+      localization('name', pkg.userscript.name);
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      push('namespace', pkg.userscript.namespace);
+
+      push('description', pkg.description);
+      localization('description', pkg.userscript.description);
+
+      push('version', pkg.version);
+
+      function author(meta, person) {
+        if (Array.isArray(person)) {
+          person.forEach(function (p) {
+            author(meta, p);
+          });
+        } else if (typeof person === 'string') {
+          var name = person.match(/([^<]*)<[^>]*>[^\(]*\([^\)]*\)/)[1];
+          push(meta, name);
+        } else if (typeof person === 'object') {
+          push(meta, person.name);
+        }
+      }
+      author('author', pkg.userscript.author || pkg.author);
+      author('contributor', pkg.contributors);
+
+      push('source', pkg.homepage);
+
+      function license(lic) {
+        if (Array.isArray(lic)) {
+          lic.forEach(license);
+        } else if (typeof lic === 'string') {
+          push('license', lic);
+        } else if (typeof lic === 'object') {
+          push('license', lic.type);
+        }
+      }
+      license(pkg.license);
+      license(pkg.licenses);
+
+      function resource(res) {
+        if (Array.isArray(res)) {
+          res.forEach(resource);
+        } else if (typeof res === 'object') {
+          push('resource', res.name + ' ' + res.url);
+        }
+      }
+      resource(pkg.userscript.resource);
+
+      for (var other in pkg.userscript.other) {
+        if (pkg.userscript.other.hasOwnProperty(other)) {
+          push(other, pkg.userscript.other[other]);
+        }
+      }
+
+      function repeat(str, n) {
+        var ret = '';
+        for (var i = 0; i < n; i++) {
+          ret += str;
+        }
+        return ret;
+      }
+
+      src += '// ==UserScript==\n';
+      metaData.forEach(function (meta) {
+        for (var metaKey in meta) {
+          if (meta.hasOwnProperty(metaKey)) {
+            src +=
+              '// @' +
+              (metaKey + repeat(' ', maxKeyLength - metaKey.length)) +
+              '  ' + meta[metaKey] +
+              '\n';
+          }
+        }
+      });
+      src += '// ==/UserScript==\n';
+
+      this.files.forEach(function (f) {
+        grunt.file.write(f.dest, src);
+      });
     });
-  });
-
 };

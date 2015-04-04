@@ -8,7 +8,20 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+  var userscript_meta = {};
+
+  var files = grunt.file.expand('test/fixtures/*_package.json');
+  files.forEach(function (file) {
+    var name = file.replace(/^test\/fixtures\/|_package\.json$/g, '');
+    var dest = 'tmp/' + name + '_meta.js';
+    userscript_meta[name] = {
+      options: {
+        pkg: grunt.file.readJSON(file)
+      },
+      dest: dest
+    };
+  });
 
   // Project configuration.
   grunt.initConfig({
@@ -28,25 +41,7 @@ module.exports = function(grunt) {
       tests: ['tmp']
     },
 
-    // Configuration to be run (and then tested).
-    userscript_meta: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
-    },
+    userscript_meta: userscript_meta,
 
     // Unit tests.
     nodeunit: {
@@ -63,11 +58,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'userscript_meta', 'nodeunit']);
 
-  // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
 
 };
