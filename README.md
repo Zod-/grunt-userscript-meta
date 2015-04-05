@@ -158,6 +158,35 @@ Resources can be added via `pkg.userscript.resource`
 // ==/UserScript==
 ```
 
+#### pkg.userscript.require
+This plugin can generate require urls for the specific userscript hosts (only greasyfork for now).
+
+```javascript
+{
+  //...
+  "userscript": {
+    "require": {
+      "greasyfork": [{
+        "id": "1-greasemonkey-test-style"
+      }, {
+        "id": "42-disable-modal-dialogs-for-automation",
+        "version": "12584"
+      }]
+    }
+  }
+}
+
+//Produces
+
+// ==UserScript==
+// ...
+// @require      https://greasyfork.org/scripts/1-greasemonkey-test-style/code/code.js
+// @require      https://greasyfork.org/scripts/42-disable-modal-dialogs-for-automation/code/code.js?version=12584
+// ...
+// ==/UserScript==
+
+```
+
 #### pkg.userscript.other
 Every other metakey can be added via the `other` object which can be either a
 single value or an array.

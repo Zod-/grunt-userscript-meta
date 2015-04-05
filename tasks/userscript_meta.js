@@ -97,6 +97,39 @@ module.exports = function (grunt) {
       }
       resource(pkg.userscript.resource);
 
+      function greasyfork(req) {
+        if (Array.isArray(req)) {
+          req.forEach(greasyfork);
+          return;
+        }
+        if (typeof req !== 'object') {
+          return;
+        }
+        var url = 'https://greasyfork.org/scripts/';
+        url += req.id;
+        url += '/code/code.js';
+        if (req.version) {
+          url += '?version=' + req.version;
+        }
+        push('require', url);
+      }
+
+      function require(req) {
+        if (typeof req !== 'object') {
+          return;
+        }
+        for (var provider in req) {
+          if (req.hasOwnProperty(provider)) {
+            switch (provider) {
+            case 'greasyfork':
+              greasyfork(req[provider]);
+              break;
+            }
+          }
+        }
+      }
+      require(pkg.userscript.require);
+
       for (var other in pkg.userscript.other) {
         if (pkg.userscript.other.hasOwnProperty(other)) {
           push(other, pkg.userscript.other[other]);
