@@ -35,6 +35,8 @@ exports.userscript_meta = {
       var actual = grunt.file.read('tmp/' + testName + '_meta.js');
       var expected = grunt.file.read('test/expected/' + testName +
         '_meta.js');
+      expected = expected.replace(/\r?\n/g, '\n');
+      actual = actual.replace(/\r?\n/g, '\n');
       test.equal(actual, expected, testName);
     });
     test.done();
